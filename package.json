@@ -1,0 +1,24 @@
+{
+  "name": "financial-times",
+  "version": "1.0.0",
+  "description": "A Slackbot to pull up to date prices from the New York Stock Exchange",
+  "main": "src/bot.js",
+  "scripts": {
+    "test": "test",
+    "start": "node src/bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bspradling8/financial-times.git"
+  },
+  "author": "Brett Spradling",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bspradling8/financial-times/issues"
+  },
+  "homepage": "https://github.com/bspradling8/financial-times#readme",
+  "dependencies": {
+    "botkit": "^0.6.16",
+    "config": "^2.0.1"
+  }
+}

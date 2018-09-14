@@ -1,0 +1,8 @@
+{
+    "slack": {
+        "token": "",
+        "clientId": "121376327456.436544413335",
+        "clientSecret": "",
+        "signingSecret": ""
+    }
+}
