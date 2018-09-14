@@ -1,15 +1,24 @@
-var Xml2js = require('xml2js');
+var Async = require('async')
+var Numeral = require('numeral')
 var Request = require('request');
+var Xml2js = require('xml2js');
 
-function getStockUpdate(ticker, callback) {
-    var stripped = ticker.substring(1)
-    getQuote(stripped, function(err, data){
-        console.log({STOCK: data})
-        callback(null, data['price'])
+let currency = '$0,0.00'
+let percent = '0.00%'
+
+function getStockUpdates(tickers, callback) {
+    var strippedTickers = tickers.map(ticker => { return ticker.substring(1)})
+    getQuotes(strippedTickers, function(err, messages){
+        if (err) {
+            callback(err)
+        }
+
+        var formattedMessages = messages.map(formatMessage)
+        callback(null, formattedMessages.join('\n'))
     })
 }
 
-function getQuote(ticker, callback) {
+function getQuotes(tickers, callback) {
     var requestBody = {
         request: {
             $: {
@@ -28,13 +37,15 @@ function getQuote(ticker, callback) {
                     type: "getquotes"
                 },
                 list: {
-                    symbol: ticker
+                    symbol: []
                 }
             }
         }
     };
     
-    var xml = new Xml2js.Builder().buildObject(requestBody)
+    requestBody.request.query.list.symbol = tickers
+
+    var xml = new Xml2js.Builder({explicitArray: false}).buildObject(requestBody)
 
     var options = {
         method: 'POST',
@@ -49,11 +60,21 @@ function getQuote(ticker, callback) {
 
     Request(options, function (error, response, body) {
         xmlParser.parseString(body, function(err, data){ 
-            callback(null, data.response.result[0].list[0].quote[0])
+            if (err) {
+                callback(err)
+            }
+            callback(null, data.response.result[0].list[0].quote)
         })
     });
 }
 
+function formatMessage (data) {
+    var price = Numeral(data['price']).format(currency)
+    var priceChange = Numeral(data['change']).format(currency)
+    var percentChange = Numeral(data['changepercent']+"%").format(percent)
+    return `*$${data['symbol']}* (${data['issuername']})\n\`${price}\` (${priceChange} / ${percentChange})`
+}
+
 module.exports= {
-    getStockUpdate
+    getStockUpdates
 }
