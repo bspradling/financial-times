@@ -1,8 +1,8 @@
 {
     "slack": {
-        "token": "",
+        "token": "xoxb-121376327456-435391100323-m8TS5B1ojOR7QhekYPH44NIJ",
         "clientId": "121376327456.436544413335",
-        "clientSecret": "",
-        "signingSecret": ""
+        "clientSecret": "30071a4d0bf39791599b6d411df4e071",
+        "signingSecret": "295460993033ba6863bf1f8f227bda34"
     }
 }

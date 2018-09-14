@@ -19,6 +19,9 @@
   "homepage": "https://github.com/bspradling8/financial-times#readme",
   "dependencies": {
     "botkit": "^0.6.16",
-    "config": "^2.0.1"
+    "config": "^2.0.1",
+    "request": "^2.88.0",
+    "requests": "^0.2.2",
+    "xml2js": "^0.4.19"
   }
 }
