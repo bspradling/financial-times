@@ -13,7 +13,13 @@ function getStockUpdates(tickers, callback) {
             callback(err)
         }
 
-        var formattedMessages = messages.map(formatMessage)
+        var formattedMessages = messages.filter(isValidTicker)
+                                        .map(formatMessage)
+
+        if (!formattedMessages.length) {
+            callback("[ERROR] No valid tickers!")
+        }
+
         callback(null, formattedMessages.join('\n'))
     })
 }
@@ -63,16 +69,24 @@ function getQuotes(tickers, callback) {
             if (err) {
                 callback(err)
             }
-            callback(null, data.response.result[0].list[0].quote)
+            callback(null, data.response.result[0].list[0].quote || [])
         })
     });
 }
 
+function isValidTicker(data) {
+    return data['currency'] == "USD"
+}
+
 function formatMessage (data) {
+    var ticker = `$${data['symbol']}`
+    var companyName = data['issuername'] || data['name']
     var price = Numeral(data['price']).format(currency)
     var priceChange = Numeral(data['change']).format(currency)
     var percentChange = Numeral(data['changepercent']+"%").format(percent)
-    return `*$${data['symbol']}* (${data['issuername']})\n\`${price}\` (${priceChange} / ${percentChange})`
+    
+    console.log(`Reporting on ${ticker}`)
+    return `*${ticker}* (${companyName})\n\`${price}\` (${priceChange} / ${percentChange})`
 }
 
 module.exports= {
