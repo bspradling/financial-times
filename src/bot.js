@@ -12,7 +12,7 @@ var slackBot = BotKit.slackbot({
 })
 var slackToken = process.env.slackToken || slackConfig.get("token")
 
-slackBot.spawn({token: slackToken})
+slackBot.spawn({retry: true, token: slackToken})
         .startRTM(
             function (err) {
                 if (err) {
