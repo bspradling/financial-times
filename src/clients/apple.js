@@ -1,30 +1,24 @@
-var Async = require('async')
-var Numeral = require('numeral')
 var Request = require('request');
 var Xml2js = require('xml2js');
 
-let currency = '$0,0.00'
-let percent = '0.00%'
-
-function getStockUpdates(tickers, callback) {
-    var strippedTickers = tickers.map(ticker => { return ticker.substring(1)})
-    getQuotes(strippedTickers, function(err, messages){
+function getStockQuotes(tickers, callback) {
+    
+    retrieveQuotesFromApple(tickers, function(err, messages){
         if (err) {
             callback(err)
         }
 
-        var formattedMessages = messages.filter(isValidTicker)
-                                        .map(formatMessage)
+        var validTickers = messages.filter(isValidTicker).map(transformResponse)
 
-        if (!formattedMessages.length) {
-            callback("[ERROR] No valid tickers!")
+        if (!validTickers.length) {
+            callback("No valid tickers!")
         }
 
-        callback(null, formattedMessages.join('\n'))
+        callback(null, validTickers)
     })
 }
 
-function getQuotes(tickers, callback) {
+function retrieveQuotesFromApple(tickers, callback) {
     var requestBody = {
         request: {
             $: {
@@ -78,17 +72,16 @@ function isValidTicker(data) {
     return data['currency'] == "USD"
 }
 
-function formatMessage (data) {
-    var ticker = `$${data['symbol']}`
-    var companyName = data['issuername'] || data['name']
-    var price = Numeral(data['price']).format(currency)
-    var priceChange = Numeral(data['change']).format(currency)
-    var percentChange = Numeral(data['changepercent']+"%").format(percent)
-    
-    console.log(`Reporting on ${ticker}`)
-    return `*${ticker}* (${companyName})\n\`${price}\` (${priceChange} / ${percentChange})`
+function transformResponse(data) {
+    return {
+        ticker: `$${data['symbol']}`,
+        name: data['issuername'] || data['name'],
+        price: data['price'],
+        priceChange: data['change'],
+        percentChange: `${data['changepercent']}%`
+    }
 }
 
-module.exports= {
-    getStockUpdates
+module.exports = {
+    getStockQuotes
 }

@@ -1,6 +1,7 @@
 var AppleClient = require('./clients/apple')
 var BotKit = require('botkit')
 var Config = require('config')
+var SlackFormat = require('./format/slack')
 
 var stockTickerRegex = /\$[a-zA-Z]{1,5}/g
 
@@ -26,12 +27,14 @@ slackBot.hears([stockTickerRegex],
                function (bot, message) {
                     var tickers = message.text.match(stockTickerRegex)
                     console.log("Processing tickers..." + JSON.stringify(tickers))
-                    AppleClient.getStockUpdates(tickers, function(err, data) {
+                    var strippedTickers = tickers.map(ticker => { return ticker.substring(1)})
+                    AppleClient.getStockQuotes(strippedTickers, function(err, data) {
                         if (err) {
-                            console.error(err)
+                            console.error(`[ERROR] ${err}`)
                             return
                         }
                         
-                        bot.reply(message, data)
+                        var formattedResponse = SlackFormat.formatMessage(data) 
+                        bot.reply(message, formattedResponse)
                     })
                 }); 
