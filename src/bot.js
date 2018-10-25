@@ -1,3 +1,4 @@
+var IexClient = require('./clients/iex')
 var AppleClient = require('./clients/apple')
 var BotKit = require('botkit')
 var Config = require('config')
@@ -28,7 +29,7 @@ slackBot.hears([stockTickerRegex],
                     var tickers = message.text.match(stockTickerRegex)
                     console.log("Processing tickers..." + JSON.stringify(tickers))
                     var strippedTickers = tickers.map(ticker => { return ticker.substring(1)})
-                    AppleClient.getStockQuotes(strippedTickers, function(err, data) {
+                    IexClient.getStockQuotes(strippedTickers, function(err, data) {
                         if (err) {
                             console.error(`[ERROR] ${err}`)
                             return

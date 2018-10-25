@@ -3,7 +3,7 @@ var Xml2js = require('xml2js');
 
 function getStockQuotes(tickers, callback) {
     
-    retrieveQuotesFromApple(tickers, function(err, messages){
+    getQuotesFromApple(tickers, function(err, messages){
         if (err) {
             callback(err)
         }
@@ -18,7 +18,7 @@ function getStockQuotes(tickers, callback) {
     })
 }
 
-function retrieveQuotesFromApple(tickers, callback) {
+function getQuotesFromApple(tickers, callback) {
     var requestBody = {
         request: {
             $: {
@@ -75,7 +75,7 @@ function isValidTicker(data) {
 function transformResponse(data) {
     return {
         ticker: `${data['symbol']}`,
-        name: `${data['issuername']}` || `${data['name']}`    ,
+        name: `${data['issuername']}` || `${data['name']}`,
         price: `${data['price']}`,
         priceChange: `${data['change']}`,
         percentChange: `${data['changepercent']}%`
