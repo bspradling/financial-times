@@ -74,10 +74,10 @@ function isValidTicker(data) {
 
 function transformResponse(data) {
     return {
-        ticker: `$${data['symbol']}`,
-        name: data['issuername'] || data['name'],
-        price: data['price'],
-        priceChange: data['change'],
+        ticker: `${data['symbol']}`,
+        name: `${data['issuername']}` || `${data['name']}`    ,
+        price: `${data['price']}`,
+        priceChange: `${data['change']}`,
         percentChange: `${data['changepercent']}%`
     }
 }
