@@ -34,7 +34,7 @@ slackBot.hears([stockTickerRegex],
                             return
                         }
                         
-                        var formattedResponse = SlackFormat.formatMessage(data) 
+                        var formattedResponse = SlackFormat.asAttachments(data) 
                         bot.reply(message, formattedResponse)
                     })
                 }); 
