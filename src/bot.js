@@ -1,4 +1,4 @@
-var AppleClient = require('./clients/apple')
+var AlphaAdvantageClient = require('./clients/alphaAdvantage')
 var BotKit = require('botkit')
 var Config = require('config')
 var SlackFormat = require('./format/slack')
@@ -28,7 +28,7 @@ slackBot.hears([stockTickerRegex],
                     var tickers = message.text.match(stockTickerRegex)
                     console.log("Processing tickers..." + JSON.stringify(tickers))
                     var strippedTickers = tickers.map(ticker => { return ticker.substring(1)})
-                    AppleClient.getStockQuotes(strippedTickers, function(err, data) {
+                    AlphaAdvantageClient.getStockQuotes(strippedTickers, function(err, data) {
                         if (err) {
                             console.error(`[ERROR] ${err}`)
                             return

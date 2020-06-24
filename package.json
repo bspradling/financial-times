@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bspradling8/financial-times#readme",
   "dependencies": {
+    "alphavantage": "^2.0.1",
     "async": "^2.6.1",
     "botkit": "^0.6.16",
     "config": "^2.0.1",
