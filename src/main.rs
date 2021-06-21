@@ -63,7 +63,8 @@ async fn main() -> Result<()> {
 
 async fn create_slack_events_listener_server(
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    let addr = std::net::SocketAddr::from(([10, 20, 117, 55], 8080));
+    // let addr = std::net::SocketAddr::from(([10, 20, 117, 55], 8080));
+    let addr = std::net::SocketAddr::from(([192, 168, 0, 108], 8080));
     info!("Loading server: {}", addr);
 
     // This is our default HTTP route when Slack routes didn't handle incoming request (different/other path).
