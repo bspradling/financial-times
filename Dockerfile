@@ -1,15 +1,15 @@
-FROM node:carbon-alpine
+FROM rust:1.53.0 as build
+RUN rustup component add rustfmt
 
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /rust
 
-# Install app dependencies
-COPY package.json /usr/src/app/
-RUN npm install
+COPY . .
+RUN cargo build
+RUN ls /rust/target/debug
 
-# Bundle app source
-COPY . /usr/src/app
+FROM gcr.io/distroless/cc-debian10
 
-EXPOSE 8080
-CMD [ "npm", "start" ]
+COPY --from=build /rust/target/debug /
+ENV RUST_LOG=INFO
+
+ENTRYPOINT ["/financial-times"]

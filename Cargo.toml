@@ -1,0 +1,17 @@
+[package]
+name = "financial-times"
+version = "0.1.0"
+authors = ["Brett Spradling <brett@spradling.me>"]
+edition = "2018"
+
+[dependencies]
+anyhow = "1.0.40"
+env_logger = "0.8.4"
+futures = "0.3.15"
+hyper = { version ="0.14", features = ["full"] }
+log = "0.4.14"
+slack-morphism = "0.7.3"
+slack-morphism-models = "0.7.3"
+slack-morphism-hyper = "0.7.3"
+tokio = { version = "1.6.1", features = ["full"] }
+yahoo_finance_api = "1.1.5"
